@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ "$1" == "download" ]]; then
+    # download code here
+    echo "Downloading..."
+    exit 0
+elif [[ "$1" == "remove" ]]; then
+    # remove code here
+    echo "Removing..."
+    exit 0
+fi
+
+/usr/bin/git "$@"
+
+exit 0
