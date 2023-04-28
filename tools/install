@@ -1,0 +1,28 @@
+#!/bin/bash
+
+echo "Installing gittemplate plugin for git..."
+
+if [ -f "$HOME/.bashrc" ]; then
+  rcfile="$HOME/.bashrc"
+  sys="/bin/bash"
+elif [ -f "$HOME/.zshrc" ]; then
+  rcfile="$HOME/.zshrc"
+  sys="/bin/zsh"
+else
+  echo "Could not find .bashrc or .zshrc file in home directory."
+  exit 1
+fi
+
+cmd='alias git="~/.gittemplate/gittemplate"'
+
+if grep -qF "$cmd" "$rcfile" >/dev/null; then
+  echo "gittemplate plugin for git is already installed"
+  exit 1
+fi
+
+echo -e "\n$cmd" >> "$rcfile"
+$sys -c "source $rcfile"
+
+echo "Successfully installed gittemplate plugin for git. alias may added into $rcfile"
+
+exit 0
