@@ -22,8 +22,9 @@ if [[ "$1" == "template" ]]; then
         echo -n "project name: "
         read projectname
         git clone "$url" "$projectname"
-        touch "$projectname/.gittemplate"
-        cat "$projectname/.gittemplate" | xargs -d '\n' mkdir -p
+        cd "$projectname"
+        touch .gittemplate
+        cat .gittemplate | xargs -d '\n' mkdir -p
         exit 0
     fi
     if [[ "$2" == "add" ]]; then
