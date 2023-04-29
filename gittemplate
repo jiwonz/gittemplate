@@ -2,10 +2,12 @@
 
 if [[ "$1" == "template" ]]; then
     if [[ "$2" == "update" ]]; then
-        echo "Updating template... test"
+        echo "Updating template..."
         git fetch
-        git merge --no-commit origin/main
+        git merge --no-commit $(git remote show)/$(git branch --show-current)
         git checkout HEAD -- $(git ls-files | grep -v -f .gittemplate)
+        cat .gittemplate | xargs -d '\n' mkdir -p
+        echo "Template update completed successfully."
         exit 0
     fi
     if [[ "$2" == "new" ]]; then
@@ -21,6 +23,7 @@ if [[ "$1" == "template" ]]; then
         read projectname
         git clone "$url" "$projectname"
         touch "$projectname/.gittemplate"
+        cat "$projectname/.gittemplate" | xargs -d '\n' mkdir -p
         exit 0
     fi
     if [[ "$2" == "add" ]]; then
@@ -29,7 +32,7 @@ if [[ "$1" == "template" ]]; then
         else
             echo -e "$3" >> .gittemplate
             git add ".gittemplate"
-            echo "$3 was added to .gittemplate"
+            echo "$3 was added to .gittemplate."
         fi
         exit 0
     fi
@@ -45,7 +48,7 @@ if [[ "$1" == "template" ]]; then
             fi
             sed -i "s#$3##g; /^$/d" .gittemplate
             git add ".gittemplate"
-            echo "$3 was removed from .gittemplate"
+            echo "$3 was removed from .gittemplate."
         fi
         exit 0
     fi
