@@ -17,7 +17,8 @@ if [[ "$1" == "template" ]]; then
             echo -n "repo url: "
             read url
         else
-           echo "Argument 3 is: $3"
+           #echo "Argument 3 is: $3"
+           :
         fi
         echo -n "project name: "
         read projectname
