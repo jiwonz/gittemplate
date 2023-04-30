@@ -3,8 +3,20 @@
 if [[ "$1" == "template" ]]; then
     if [[ "$2" == "update" ]]; then
         echo "Updating template..."
-        git fetch
-        git merge --no-commit $(git remote show)/$(git branch --show-current)
+        remote=$(git remote show | grep -v gittemplate)
+        remote_count=$(git remote show | grep -v gittemplate | wc -l)
+        if [ $remote_count -gt 1 ]; then
+            git remote show | grep -v gittemplate | sed 's/^/\t/'
+            echo -n "More than one remote was found in your repo. Please select one remote to receive updates from these.\nremote name: "
+            read remote
+        else
+            #echo "$number1 is not greater than $number2"
+            :
+        fi
+        git commit -am "$(date +'%Y-%m-%d-%H-%M-%S')"
+        echo "Getting update from remote $remote."
+        git fetch $remote
+        git merge --no-commit $remote/$(git branch --show-current)
         git checkout HEAD -- $(git ls-files | grep -v -f .gittemplate)
         cat .gittemplate | xargs -d '\n' mkdir -p
         echo "Template update completed successfully."
@@ -56,6 +68,23 @@ if [[ "$1" == "template" ]]; then
     fi
     if [[ "$2" == "show" ]]; then
         cat .gittemplate
+        exit 0
+    fi
+    if [[ "$2" == "remote" ]]; then
+        url="$3"
+        if [[ -z "$3" ]]; then
+            #echo "Argument 3 is not given"
+            echo -n "remote url: "
+            read url
+        else
+           #echo "Argument 3 is: $3"
+           :
+        fi
+        git remote add gittemplate $url
+        exit 0
+    fi
+    if [[ "$2" == "push" ]]; then
+        git push gittemplate $(git branch --show-current)
         exit 0
     fi
     echo "gittemplate: '$2' is not a gittemplate command."
