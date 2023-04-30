@@ -13,7 +13,7 @@ if [[ "$1" == "template" ]]; then
             #echo "$number1 is not greater than $number2"
             :
         fi
-        git commit -am "$(date +'%Y-%m-%d-%H-%M-%S')"
+        #git commit -am "$(date +'%Y-%m-%d-%H-%M-%S')"
         echo "Getting update from remote $remote."
         git fetch $remote
         git merge --no-commit $remote/$(git branch --show-current)
